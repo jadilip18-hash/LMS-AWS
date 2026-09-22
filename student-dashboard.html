@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Student Dashboard - Student Portal</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <style>
+
+        /* =========================================================
+           STUDENT DASHBOARD - TWO GRAPHS ONLY
+        ========================================================= */
+
+        .student-analytics {
+            margin-top: 24px;
+            margin-bottom: 24px;
+        }
+
+        .analytics-heading {
+            margin-bottom: 18px;
+        }
+
+        .analytics-heading h2 {
+            margin: 0 0 6px;
+            color: var(--navy, #1e293b);
+            font-size: 22px;
+        }
+
+        .analytics-heading p {
+            margin: 0;
+            color: var(--muted, #64748b);
+            font-size: 14px;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .analytics-card {
+            background: #ffffff;
+            border: 1px solid #e7e5df;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(30, 41, 59, 0.08);
+            min-width: 0;
+        }
+
+        .analytics-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .analytics-card-header h3 {
+            margin: 0 0 5px;
+            font-size: 17px;
+            color: #1e293b;
+        }
+
+        .analytics-card-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .analytics-icon {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            border-radius: 9px;
+            background: #ffedd5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .analytics-chart-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+        }
+
+        .analytics-chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .analytics-empty {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        @media (max-width: 900px) {
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .analytics-card {
+                padding: 15px;
+            }
+
+            .analytics-chart-container {
+                height: 240px;
+            }
+
+            .analytics-heading h2 {
+                font-size: 19px;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            #studentTaskSubmissionForm > div:first-of-type {
+                grid-template-columns: 1fr !important;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="student-layout">
+
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
+        <aside class="sidebar">
+
+
+            <div class="sidebar-logo">
+
+                <div class="logo-icon">
+                    T
+                </div>
+
+                <div>
+
+                    <h2>
+                        Student Portal
+                    </h2>
+
+                    <span>
+                        Learning Dashboard
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <nav class="sidebar-nav">
+
+
+                <a
+                    href="#dashboard"
+                    class="nav-item active"
+                >
+
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#events"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📅
+                    </span>
+
+                    <span>
+                        Events
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#recordings"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        ▶
+                    </span>
+
+                    <span>
+                        Recordings
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#tasks"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        ✓
+                    </span>
+
+                    <span>
+                      Task   submission
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#assessments"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        ▣
+                    </span>
+
+                    <span>
+                        Assessments
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#placements"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        💼
+                    </span>
+
+                    <span>
+                        Placement Support
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#queries"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        💬
+                    </span>
+
+                    <span>
+                        My Queries
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+
+            <div class="sidebar-bottom">
+
+
+                <a
+                    href="#profile"
+                    class="bottom-item"
+                >
+
+                    <span>
+                        👤
+                    </span>
+
+                    <span>
+                        My Profile
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="index.html"
+                    class="bottom-item logout"
+                >
+
+                    <span>
+                        ↪
+                    </span>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+
+        <main class="main-content">
+
+
+            <!-- =================================================
+                 TOP BAR
+            ================================================== -->
+
+            <header class="top-bar">
+
+
+                <div class="page-title">
+
+                    <h1>
+                        Student Dashboard
+                    </h1>
+
+                    <p>
+                        Track your learning, tasks and placement activities
+                    </p>
+
+                </div>
+
+
+
+                <div class="student-actions">
+
+
+                    <button
+                        class="notification-button"
+                        title="Notifications"
+                    >
+
+                        🔔
+
+                        <span class="notification-dot"></span>
+
+                    </button>
+
+
+
+                    <div class="student-profile">
+
+
+                        <div
+                            class="profile-avatar"
+                            id="studentAvatar"
+                        >
+                            S
+                        </div>
+
+
+
+                        <div class="profile-info">
+
+                            <strong id="studentName">
+                                Student
+                            </strong>
+
+                            <span>
+                                Student
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- =================================================
+                 DASHBOARD FRONT PAGE
+
+                 ONLY:
+                 1. Welcome
+                 2. Counts
+                 3. Assessment graph
+                 4. Task graph
+            ================================================== -->
+
+            <section
+                id="dashboard"
+                class="content-section dashboard-section"
+            >
+
+
+                <!-- =================================================
+                     WELCOME
+                ================================================== -->
+
+                <div class="welcome-card">
+
+
+                    <div>
+
+                        <span class="welcome-label">
+                            Welcome back
+                        </span>
+
+                        <h2 id="welcomeStudentName">
+                            Hello, Student! 👋
+                        </h2>
+
+                        <p>
+                            Here's an overview of your learning activities.
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="welcome-icon">
+                        🎓
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     COUNT CARDS
+                ================================================== -->
+
+                <div class="stats-grid">
+
+
+                    <!-- EVENTS COUNT -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            📅
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Upcoming Events
+                            </span>
+
+                            <h2 id="upcomingEvents">
+                                0
+                            </h2>
+
+                            <small>
+                                Events scheduled
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- TASK COUNT -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ✓
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Pending Tasks
+                            </span>
+
+                            <h2 id="pendingTasks">
+                                0
+                            </h2>
+
+                            <small>
+                                Tasks to complete
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ASSESSMENT COUNT -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ▣
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Assessments
+                            </span>
+
+                            <h2 id="assessmentCount">
+                                0
+                            </h2>
+
+                            <small>
+                                Assessments available
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PLACEMENT COUNT -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            💼
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Placement Progress
+                            </span>
+
+                            <h2>
+                                0%
+                            </h2>
+
+                            <small>
+                                Current progress
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     ONLY TWO GRAPHS
+                ================================================== -->
+
+                <div class="student-analytics">
+
+
+                    <div class="analytics-heading">
+
+                        <h2>
+                            📈 My Learning Performance
+                        </h2>
+
+                        <p>
+                            Track your assessment performance and task activity.
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="analytics-grid">
+
+
+                        <!-- =================================================
+                             GRAPH 1 - ASSESSMENT MARKS
+                        ================================================== -->
+
+                        <div class="analytics-card">
+
+
+                            <div class="analytics-card-header">
+
+                                <div>
+
+                                    <h3>
+                                        📊 Assessment Marks by Subject
+                                    </h3>
+
+                                    <p>
+                                        Your assessment performance
+                                    </p>
+
+                                </div>
+
+
+                                <div class="analytics-icon">
+                                    📈
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="analytics-chart-container">
+
+                                <canvas
+                                    id="assessmentChart"
+                                ></canvas>
+
+
+                                <div
+                                    id="assessmentChartEmpty"
+                                    class="analytics-empty"
+                                >
+                                    Assessment marks will appear here.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             GRAPH 2 - TASK ACTIVITY
+                        ================================================== -->
+
+                        <div class="analytics-card">
+
+
+                            <div class="analytics-card-header">
+
+                                <div>
+
+                                    <h3>
+                                        ✅ Task Activity
+                                    </h3>
+
+                                    <p>
+                                        Your task status overview
+                                    </p>
+
+                                </div>
+
+
+                                <div class="analytics-icon">
+                                    ✓
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="analytics-chart-container">
+
+                                <canvas
+                                    id="taskChart"
+                                ></canvas>
+
+
+                                <div
+                                    id="taskChartEmpty"
+                                    class="analytics-empty"
+                                >
+                                    Task activity will appear here.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!--
+                    IMPORTANT:
+                    NO EVENTS DETAILS HERE
+                    NO RECORDINGS DETAILS HERE
+                    NO TASK DETAILS HERE
+                    NO PLACEMENT DETAILS HERE
+
+                    Those features are available only
+                    through their own sidebar sections.
+                -->
+
+
+            </section>
+
+
+
+            <!-- =====================================================
+                 EVENTS FEATURE
+            ====================================================== -->
+
+            <section
+                id="events"
+                class="content-section"
+                style="display: none;"
+            >
+
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Events
+                        </h2>
+
+                        <p>
+                            Upcoming sessions and events
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="event-list">
+
+                    <div class="content-placeholder">
+
+                        <div class="placeholder-icon">
+                            📅
+                        </div>
+
+                        <h3>
+                            Your Events
+                        </h3>
+
+                        <p>
+                            Events created by the admin will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                 RECORDINGS FEATURE
+            ====================================================== -->
+
+            <section
+                id="recordings"
+                class="content-section"
+                style="display: none;"
+            >
+
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Recordings
+                        </h2>
+
+                        <p>
+                            Access your class recordings
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="recording-list">
+
+                    <div class="content-placeholder">
+
+                        <div class="placeholder-icon">
+                            ▶
+                        </div>
+
+                        <h3>
+                            Class Recordings
+                        </h3>
+
+                        <p>
+                            Available class recordings will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                 TASK FEATURE
+            ====================================================== -->
+
+            <section
+                id="tasks"
+                class="content-section"
+                style="display: none;"
+            >
+
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Task Submission
+                        </h2>
+
+                        <p>
+                            View and submit your assigned tasks
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="task-submission-card"
+                    style="background:#ffffff;border:1px solid #e7e5df;border-radius:14px;padding:24px;margin-bottom:22px;box-shadow:0 8px 24px rgba(30,41,59,.08);"
+                >
+
+                    <div
+                        style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:20px;"
+                    >
+
+                        <div>
+
+                            <h3
+                                style="margin:0 0 6px;color:#1e293b;"
+                            >
+                                Submit Your Task
+                            </h3>
+
+                            <p
+                                style="margin:0;color:#64748b;font-size:13px;"
+                            >
+                                Fill in the details and submit your GitHub repository.
+                            </p>
+
+                        </div>
+
+                        <div
+                            style="width:42px;height:42px;border-radius:10px;background:#ffedd5;display:flex;align-items:center;justify-content:center;font-size:20px;"
+                        >
+                            ✓
+                        </div>
+
+                    </div>
+
+
+
+                   <form id="studentTaskSubmissionForm">
+                        <div
+                            style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;"
+                        >
+
+                            <div class="form-group">
+
+                                <label for="studentTaskSubject">
+                                    Subject
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="studentTaskSubject"
+                                    name="subject"
+                                    placeholder="Enter subject"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="studentTaskCollege">
+                                    College
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="studentTaskCollege"
+                                    name="college"
+                                    placeholder="Enter college name"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="studentTaskEventName">
+                                    Event Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="studentTaskEventName"
+                                    name="event_name"
+                                    placeholder="Enter event name"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 MODIFIED:
+                                 TASK NAME IS NOW MANUAL INPUT
+                            ================================================== -->
+
+                            <div class="form-group">
+
+                                <label for="studentTaskName">
+                                    Task Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="studentTaskName"
+                                    name="task_name"
+                                    placeholder="Enter task name"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 MODIFIED:
+                                 CATEGORY IS NOW DROPDOWN
+                            ================================================== -->
+
+                            <div class="form-group">
+
+                                <label for="studentTaskCategory">
+                                    Category
+                                </label>
+
+                                <select
+                                    id="studentTaskCategory"
+                                    name="category"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select category
+                                    </option>
+
+                                    <option value="College">
+                                        College
+                                    </option>
+
+                                    <option value="Bootcamp">
+                                        Bootcamp
+                                    </option>
+
+                                    <option value="Webinar">
+                                        Webinar
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="studentGithubLink">
+                                    GitHub Repository Link
+                                </label>
+
+                                <input
+                                    type="url"
+                                    id="studentGithubLink"
+                                    name="github_link"
+                                    placeholder="https://github.com/username/repository"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            style="display:flex;justify-content:flex-end;margin-top:22px;"
+                        >
+
+                            <button
+                                type="submit"
+                                class="primary-button"
+                                id="studentTaskSubmitButton"
+                            >
+                                Submit Task
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="studentTaskSubmissionStatus"
+                            class="login-message"
+                            style="margin-top:12px;"
+                        ></div>
+
+                    </form>
+
+                </div>
+
+
+
+                <div class="task-list">
+
+                    <div class="content-placeholder">
+
+                        <div class="placeholder-icon">
+                            ✓
+                        </div>
+
+                        <h3>
+                            Your Tasks
+                        </h3>
+
+                        <p>
+                            Assigned tasks created by the admin will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="dashboard-card"
+                    style="margin-top:22px;"
+                >
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                My Submitted Tasks
+                            </h3>
+
+                            <p>
+                                Your submitted task details and GitHub links
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="studentTaskSubmissionHistory">
+
+                        <div class="content-placeholder">
+                            <p>
+                                No task submissions yet.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+                        <!-- =====================================================
+                 ASSESSMENTS FEATURE
+            ====================================================== -->
+
+            <section
+                id="assessments"
+                class="content-section"
+                style="display: none;"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Assessments
+                        </h2>
+
+                        <p>
+                            View your assessments and marks
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="assessment-list">
+
+                    <div class="content-placeholder">
+
+                        <div class="placeholder-icon">
+                            ▣
+                        </div>
+
+                        <h3>
+                            Your Assessments
+                        </h3>
+
+                        <p>
+                            Assessments created by the admin will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                 PLACEMENT SUPPORT FEATURE
+            ====================================================== -->
+
+            <section
+                id="placements"
+                class="content-section"
+                style="display: none;"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Placement Support
+                        </h2>
+
+                        <p>
+                            Placement opportunities and support
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="placement-list">
+
+                    <div class="content-placeholder">
+
+                        <div class="placeholder-icon">
+                            💼
+                        </div>
+
+                        <h3>
+                            Placement Support
+                        </h3>
+
+                        <p>
+                            Placement opportunities created by the admin will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                 QUERIES FEATURE
+            ====================================================== -->
+
+            <section
+                id="queries"
+                class="content-section"
+                style="display: none;"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            My Queries
+                        </h2>
+
+                        <p>
+                            Ask questions and view admin replies
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Submit a Query
+                            </h3>
+
+                            <p>
+                                Send your questions to the administrator
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <form id="studentQueryForm">
+
+                        <div class="form-group">
+
+                            <label for="studentQuerySubject">
+                                Subject
+                            </label>
+
+                            <input
+                                type="text"
+                                id="studentQuerySubject"
+                                name="subject"
+                                placeholder="Enter subject"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="studentQueryMessage">
+                                Your Query
+                            </label>
+
+                            <textarea
+                                id="studentQueryMessage"
+                                name="message"
+                                rows="5"
+                                placeholder="Enter your query"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="primary-button"
+                        >
+                            Send Query
+                        </button>
+
+
+                        <div
+                            id="studentQueryStatus"
+                            class="login-message"
+                        ></div>
+
+                    </form>
+
+                </div>
+
+
+                <div
+                    class="dashboard-card"
+                    style="margin-top:22px;"
+                >
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Query History
+                            </h3>
+
+                            <p>
+                                Your previous queries and admin replies
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="studentQueryHistory">
+
+                        <div class="content-placeholder">
+
+                            <p>
+                                No queries yet.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                 PROFILE FEATURE
+            ====================================================== -->
+
+            <section
+                id="profile"
+                class="content-section"
+                style="display: none;"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            My Profile
+                        </h2>
+
+                        <p>
+                            View your student information
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="profile-details">
+
+                        <div class="profile-detail-row">
+
+                            <span>
+                                Student ID
+                            </span>
+
+                            <strong id="profileStudentId">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail-row">
+
+                            <span>
+                                Name
+                            </span>
+
+                            <strong id="profileStudentName">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail-row">
+
+                            <span>
+                                Username
+                            </span>
+
+                            <strong id="profileUsername">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail-row">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong id="profileEmail">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail-row">
+
+                            <span>
+                                Course
+                            </span>
+
+                            <strong id="profileCourse">
+                                -
+                            </strong>
+
+                        </div>
+                 <div class="profile-detail-row">
+                            <span>
+                                Status
+                            </span>
+                            <strong id="profileStatus">
+                                -
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+    <!-- =========================================================
+         STUDENT JAVASCRIPT FILES
+    ========================================================== -->
+    <script src="student.js?v=20260907"></script>
+</body>
+</html>
